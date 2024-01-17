@@ -61,6 +61,7 @@ function dice(value) {
         </div>    
       </div>;
       break;    
+    default: face = null;
   }
   return face;
 }
