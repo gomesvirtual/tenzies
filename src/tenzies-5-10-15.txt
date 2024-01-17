@@ -1,0 +1,168 @@
+import { useEffect, useState } from "react";
+import Board from "./Board";
+import { nanoid } from "nanoid";
+import Confetti from "react-confetti";
+import fireworksSoundAsset from '../sounds/fireworks.wav'
+import clickSoundAsset from '../sounds/click.wav'
+
+const clickSound = new Audio(clickSoundAsset);
+clickSound.volume = 0.2;
+const fireworksSound = new Audio(fireworksSoundAsset);
+fireworksSound.volume = 0.2;
+const diceNumber = 10;
+
+
+function Tenzies() {
+  const [dice, setDice] = useState(allNewDice());
+  const [tenzies, setTenzies] = useState(true);
+  const [rolls, setRolls] = useState(0);
+  const [tens, setTens] = useState(null);
+  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [timeMill, setTimeMill] = useState(null);
+  const [newRecord, setNewRecord] = useState(false);
+
+  
+  function generateNewDie() {
+    return { 
+      id: nanoid(),
+      value: Math.ceil(Math.random() * 6), 
+      isHeld: false       
+    }
+  }
+
+  function allNewDice() {
+    const newDice = []; 
+    for (let index = 0; index < diceNumber; index++) {      
+      newDice.push(generateNewDie());
+    }
+    return newDice;
+  }  
+
+  function handleRollDice() {
+    if (!tenzies) {
+      setDice(oldDice => oldDice.map(die => !die.isHeld ? generateNewDie() : die));
+      setRolls(roll => roll + 1);
+    } else {
+      resetGame();
+    }    
+  }
+
+  function resetGame() {
+    setDice(allNewDice());
+    setTenzies(false);
+    setRolls(0);
+    setMinutes(0);
+    setSeconds(0);
+    setTens(null);
+    setTimeMill(null);
+    setNewRecord(false);
+  }
+
+  function holdDice(id) {
+    if (tenzies) {
+      return
+    }
+    clickSound.play();
+    setDice(oldDice => oldDice.map(die => {
+      return die.id === id ? 
+          {...die, isHeld: !die.isHeld} :
+          die
+    }))
+  }
+
+  useEffect(() => {
+    const allTheSame = dice.every(die => die.value === dice[0].value && die.isHeld);
+    allTheSame && setTenzies(true); 
+  }, [dice])
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!tenzies) {
+        setTens(timeGame => timeGame + 1);
+        setTimeMill(time => time + 1);
+      }      
+    }, 10)
+    return () => clearInterval(interval);
+  }, [tens, tenzies])
+
+  if (tens > 99) {
+    setSeconds(sec => sec + 1);
+    setTens(0);    
+  }
+
+  if (seconds > 59) {
+    setMinutes(min => min + 1);
+    setSeconds(0);
+    setTens(0);
+  }  
+
+  //const bestTimes = JSON.parse(localStorage.getItem('bestTimes')) || [];
+
+  //const fiveDice = JSON.parse(localStorage.getItem('fiveDice')) || [];
+  const tenDice = JSON.parse(localStorage.getItem('tenDice')) || [];
+  //const fifteenDice = JSON.parse(localStorage.getItem('fifteenDice')) || [];
+
+  if (tenzies && tens && !newRecord) {      
+   /* if (bestTimes.every(bt => bt.timeMill > timeMill)) {
+      setNewRecord(true);
+      fireworksSound.play();
+    }
+
+    if (bestTimes.length < 5) { 
+      setTimes();      
+    } else if (bestTimes.some(bt => bt.timeMill > timeMill)) {
+      bestTimes.pop();
+      setTimes();
+    }*/
+    switch (diceNumber) {
+      case 5:   
+        //setTimes(fiveDice, "fiveDice");
+        break;
+      case 15:
+        //setTimes(fifteenDice, "fifteenDice");
+        break;
+      default:
+        setTimes(tenDice, "tenDice");
+    }
+  }
+
+  function setTimes(currentArray, arrayName) {
+    let stringTime = minutes > 9 ? minutes : "0" + minutes;
+    stringTime += seconds > 9 ? ":" + seconds : ":0" + seconds;
+    stringTime += tens > 9 ? ":" + tens : ":0" + tens;
+
+    if (currentArray.every(bt => bt.timeMill > timeMill)) {
+      setNewRecord(true);
+      fireworksSound.play();
+    }
+
+    if (currentArray.length === 5 && currentArray.some(bt => bt.timeMill > timeMill)) {
+      currentArray.pop();
+    }
+
+    if (currentArray.length < 5) { 
+      currentArray.push({ stringTime, timeMill });
+      const sortedTimes = currentArray.sort((a, b) => a.timeMill - b.timeMill);      
+      localStorage.setItem(arrayName, JSON.stringify(sortedTimes));
+    }
+  }
+  
+  //const showFiveDice = fiveDice.map(bt => bt.stringTime);
+  const showTenDice = tenDice.map(bt => bt.stringTime);
+  //const showFifteenDice = fifteenDice.map(bt => bt.stringTime);
+
+  return ( 
+    <main className='tenzies-main'>
+      <div className="best-times">
+        <h4>Best Times</h4>
+        <span>{ showTenDice }</span>      
+      </div>      
+      <Board dice={dice} holdDice={holdDice} handleRollDice={handleRollDice} tenzies={tenzies} tens={tens} seconds={seconds} minutes={minutes} newRecord={newRecord} rolls={rolls} resetGame={resetGame} />
+      {newRecord && <Confetti />}
+    </main>    
+  );
+}
+
+export default Tenzies;
