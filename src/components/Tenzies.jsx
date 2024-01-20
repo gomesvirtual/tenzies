@@ -115,14 +115,19 @@ function Tenzies() {
     }    
   } 
   
-  const showBestTimes = bestTimes.map(bt => bt.stringTime);
+  const showBestTimes = bestTimes.map(bt => <li>{bt.stringTime}</li>);
+
+  console.log(showBestTimes)
 
   return ( 
     <main className='tenzies-main'>
-      <div className="best-times">
-        {bestTimes.length > 0 && <h4>Best Times</h4>}
-        <span>{ showBestTimes }</span>      
-      </div>      
+      {
+        bestTimes.length > 0 && 
+        <ul className="best-times">
+          <li>Best Times</li>
+            {showBestTimes}
+        </ul>
+      }      
       <Board dice={dice} holdDice={holdDice} handleRollDice={handleRollDice} tenzies={tenzies} tens={tens} seconds={seconds} minutes={minutes} newRecord={newRecord} rolls={rolls} resetGame={resetGame} />
       {newRecord && <Confetti />}
     </main>    
