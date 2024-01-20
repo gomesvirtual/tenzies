@@ -1,5 +1,6 @@
 import Tenzies from './components/Tenzies';
-import './style.css'
+import './styles/style.css';
+import './styles/dice.css';
 
 function App() {
   return <Tenzies />;

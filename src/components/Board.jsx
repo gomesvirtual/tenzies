@@ -10,8 +10,8 @@ function Board(props) {
 
   return ( 
     <>
-      <h1>Tenzies</h1>
-      <p>Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
+      <h1 className="tenzies-title">Tenzies</h1>
+      <p className="tenzies-rules">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
       <div className='tenzies-dice'>{ diceElements }</div>
       <button onClick={props.handleRollDice} className="tenzies-btn">{!props.tenzies ? "Roll" : "New Game"}</button>
       { !props.tenzies && <button onClick={props.resetGame} className="reset-game">Reset</button> }
