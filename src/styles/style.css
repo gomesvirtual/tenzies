@@ -4,9 +4,13 @@
   padding: 0;
 }
 
-html, body {  
+body {  
   background-color: #0B2434;
   font-family: Karla;  
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 .tenzies-main {
@@ -36,7 +40,7 @@ html, body {
   font-weight: 400;
 }
 
-.best-times {  
+.top-scores {  
   position: absolute;  
   top: 30px;
   right: 30px;
@@ -77,18 +81,6 @@ li:first-child {
   box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.5);
 }
 
-.reset-game {
-  margin-top: 35px;
-  padding: 7px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: rgb(160, 160, 160);
-  color: white;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-  font-family: Karla;
-  font-size: 1rem;
-  cursor: pointer;
-}
 
 .timer {
   display: flex;
@@ -117,4 +109,35 @@ li:first-child {
   color: #409963;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
+}
+
+
+.reset-game {
+  margin-top: 20px;
+  padding: 7px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(160, 160, 160);
+  color: white;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+  font-family: Karla;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/*************** MEDIA QUERIES ****************/
+
+@media (max-width: 500px) {
+  body {
+    background-color: #e7e7e7;
+  }
+
+  .tenzies-rules {
+    width: 250px;
+  }
+
+  .top-scores {
+    font-size: 12px;
+    right: 15px;
+  }  
 }

@@ -91,7 +91,7 @@ function Tenzies() {
     setTens(0);
   } 
   
-  const bestTimes = JSON.parse(localStorage.getItem('bestTimes')) || [];
+  const topScores = JSON.parse(localStorage.getItem('topScores')) || [];
 
   if (tenzies && tens && !newRecord) { 
     let stringTime = minutes > 9 ? minutes : "0" + minutes;
@@ -100,32 +100,30 @@ function Tenzies() {
 
     const timeMill = Number(stringTime.replaceAll(":",""));
 
-    if (bestTimes.every(bt => bt.timeMill > timeMill)) {
+    if (topScores.every(ts => ts.timeMill > timeMill)) {
       setNewRecord(true);
       fireworksSound.play();
     }
-    if (bestTimes.length === 5 && bestTimes.some(bt => bt.timeMill > timeMill)) {
-      bestTimes.pop();
+    if (topScores.length === 5 && topScores.some(ts => ts.timeMill > timeMill)) {
+      topScores.pop();
     }
 
-    if (bestTimes.length < 5) { 
-      bestTimes.push({ stringTime, timeMill });
-      const sortedTimes = bestTimes.sort((a, b) => a.timeMill - b.timeMill);      
-      localStorage.setItem("bestTimes", JSON.stringify(sortedTimes));
+    if (topScores.length < 5) { 
+      topScores.push({ stringTime, timeMill });
+      const sortedTimes = topScores.sort((a, b) => a.timeMill - b.timeMill);      
+      localStorage.setItem("topScores", JSON.stringify(sortedTimes));
     }    
   } 
   
-  const showBestTimes = bestTimes.map(bt => <li>{bt.stringTime}</li>);
-
-  console.log(showBestTimes)
+  const showTopScores = topScores.map(ts => <li>{ts.stringTime}</li>);
 
   return ( 
     <main className='tenzies-main'>
       {
-        bestTimes.length > 0 && 
-        <ul className="best-times">
-          <li>Best Times</li>
-            {showBestTimes}
+        topScores.length > 0 && 
+        <ul className="top-scores">
+          <li>Top Scores</li>
+            {showTopScores}
         </ul>
       }      
       <Board dice={dice} holdDice={holdDice} handleRollDice={handleRollDice} tenzies={tenzies} tens={tens} seconds={seconds} minutes={minutes} newRecord={newRecord} rolls={rolls} resetGame={resetGame} />
