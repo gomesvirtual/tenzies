@@ -118,17 +118,19 @@ function Tenzies() {
   const showTopScores = topScores.map(ts => <li>{ts.stringTime}</li>);
 
   return ( 
-    <main className='tenzies-main'>
-      {
-        topScores.length > 0 && 
-        <ul className="top-scores">
-          <li>Top Scores</li>
-            {showTopScores}
-        </ul>
-      }      
-      <Board dice={dice} holdDice={holdDice} handleRollDice={handleRollDice} tenzies={tenzies} tens={tens} seconds={seconds} minutes={minutes} newRecord={newRecord} rolls={rolls} resetGame={resetGame} />
+    <>
+      <main className='tenzies-main'>
+        {
+          topScores.length > 0 && 
+          <ul className="top-scores">
+            <li>Top Scores</li>
+              {showTopScores}
+          </ul>
+        }      
+        <Board dice={dice} holdDice={holdDice} handleRollDice={handleRollDice} tenzies={tenzies} tens={tens} seconds={seconds} minutes={minutes} newRecord={newRecord} rolls={rolls} resetGame={resetGame} />        
+      </main>   
       {newRecord && <Confetti />}
-    </main>    
+    </> 
   );
 }
 

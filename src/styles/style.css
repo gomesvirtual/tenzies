@@ -125,11 +125,19 @@ li:first-child {
   cursor: pointer;
 }
 
+canvas {
+  width: 100%;
+}
+
 /*************** MEDIA QUERIES ****************/
 
 @media (max-width: 500px) {
   body {
     background-color: #e7e7e7;
+  }
+
+  .tenzies-main {
+    margin: 0;
   }
 
   .tenzies-rules {
@@ -139,5 +147,5 @@ li:first-child {
   .top-scores {
     font-size: 12px;
     right: 15px;
-  }  
+  }    
 }
